@@ -23,7 +23,7 @@ class Event(BaseModel):
 @web_endpoint(method="POST")
 async def f(event: Event, token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     import os
-    print(f'wandb payload\n:{event.event_type=}\n{event.event_author=}\n{event.alias=}\n{event.artifact_version=}\n{event.artifact_version_string=}\n{event.artifact_collection_name=}\n{event.project_name=}\n{event.entity_name=}')
+    print(f'wandb payload:\n{event.event_type=}\n{event.event_author=}\n{event.alias=}\n{event.artifact_version=}\n{event.artifact_version_string=}\n{event.artifact_collection_name=}\n{event.project_name=}\n{event.entity_name=}')
     if token.credentials != os.environ["AUTH_TOKEN"]:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

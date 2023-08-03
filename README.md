@@ -1,3 +1,69 @@
+
+# W&B Modal Web Hooks
+> Trigger a webhook from W&B to Modal
+
+Webhooks are nice ways to trigger external applications to perform some action.  This is a toy example that receives a webhook from Weights & Biases.  [This document](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw) describes how to setup W&B webhooks with GitHub Actions, however I think it is more useful to show how this might work with Modal Labs, because Modal is:
+
+1. Faster
+2. You have access to GPUs
+3. More ergonomic (you can locally debug, easier to use)
+
+## Instructions
+
+1. Setup
+
+    ```bash
+    pip install -U modal-client
+    ```
+
+1. Setup a [modal secret](https://modal.com/secrets) with the name `my-random-secret`  with the following fields:
+
+    - Key: `AUTH_TOKEN`
+    - Value: `Bearer secret-random-token`
+
+1. Create a [modal webhook](https://modal.com/docs/guide/webhooks) by running the following command from the root of this repo: 
+
+    ```bash
+    modal deploy server.py
+    ```
+
+    You will get an endpoint that you need to use in the next step.  This url will look something like ` https://hamelsmu--wandb-hook-f.modal.run`
+
+4. Create a secret in your wandb team settings with the name `AUTH_TOKEN` and value `Bearer secret-random-token`
+
+5. Create a new [W&B Webhook](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw). Set the url to the one you got in the previous step, and the `Access token` to the `AUTH_TOKEN`.  
+
+6. Create a new [automation](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw#1.-create-a-github-fine-grained-personal-access-token-(pat)): Set the trigger to `an artificat alias is added` and set the Alias regex to `candidate`.  Next, set the following payload:
+
+    ```json
+    {
+    "event_type": "${event_type}",
+    "event_author": "${event_author}",
+    "alias": "${alias}",
+    "artifact_version": "${artifact_version}",
+    "artifact_version_string": "${artifact_version_string}",
+    "artifact_collection_name": "${artifact_collection_name}",
+    "project_name": "${project_name}",
+    "entity_name": "${entity_name}"
+    }
+    ```
+
+7. Trigger the payload
+
+    The easiest way to trigger the payload is to go to the model registry and add an alias 
+
+    ![](img/2023-08-03-14-12-32.png)
+
+    type in `candidate`.  This will trigger the webhook.
+
+8. Check the logs
+
+    Go to the [logs for your modal webhook](https://modal.com/logs) and you should see something like this:
+
+    ![](img/2023-08-03-14-13-58.png)
+
+## Further reading
+
 ### Modal
 
 1. [Webhooks](https://modal.com/docs/guide/webhooks)
@@ -7,4 +73,6 @@
 
 ### W&B Webhooks
 
-[W&B Webhooks](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw#1.-create-a-github-fine-grained-personal-access-token-(pat))
+[W&B Webhooks](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw)
+
+
