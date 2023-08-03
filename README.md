@@ -1,8 +1,8 @@
 
 # W&B Modal Web Hooks
-> Trigger a webhook from W&B to Modal
+> Setup a webhook that integrates the W&B model registry w/ [Modal Labs](https://modal.com/).
 
-Webhooks are nice ways to trigger external applications to perform some action.  This is a toy example that receives a webhook from Weights & Biases.  [This document](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw) describes how to setup W&B webhooks with GitHub Actions, however I think it is more useful to show how this might work with Modal Labs, because Modal is:
+Webhooks are a nice way to trigger external applications to perform some action.  This is an example that receives a webhook when you change a tag on a model in a Weights & Biases model registry.  [This document](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw) describes how to setup W&B webhooks with GitHub Actions. However, I think it is more useful to show how this might work with Modal Labs, because Modal is:
 
 1. Faster
 2. You have access to GPUs
