@@ -56,11 +56,14 @@ Webhooks are a nice way to trigger external applications to perform some action.
 
     type in `candidate`.  This will trigger the webhook.
 
-8. Check the logs
-
-    Go to the [logs for your modal webhook](https://modal.com/logs) and you should see something like this:
+8. Check the logs. Go to the [logs for your modal webhook](https://modal.com/logs) and you should see something like this:
 
     ![](img/2023-08-03-14-13-58.png)
+
+9. Do stuff!  You can do tasks like:
+    - Download the appropriate model from the registry based on the webhook payload and test/run it.
+    - Push the model to an inference server or update a Modal deployment.
+    - Send a [Slack message](https://modal.com/docs/guide/ex/stable_diffusion_slackbot#slack-webhook) to a channel.
 
 ## Further reading
 
