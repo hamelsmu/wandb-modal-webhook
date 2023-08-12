@@ -9,6 +9,7 @@ auth_scheme = HTTPBearer()
 
 stub = Stub("wandb-hook")
 class Event(BaseModel):
+    "Defines the payload your webhook will send."
     event_type: str
     event_author: str
     alias: str
@@ -18,12 +19,18 @@ class Event(BaseModel):
     project_name: str
     entity_name: str
 
+    def __str__(self):
+        msg = 'Payload:\n========\n'
+        for k,v in self.model_dump().items():
+            msg += f'{k}={v}\n'
+        return msg
 
 @stub.function(secret=Secret.from_name("my-random-secret"))
 @web_endpoint(method="POST")
 async def f(event: Event, token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     import os
-    print(f'wandb payload:\n{event.event_type=}\n{event.event_author=}\n{event.alias=}\n{event.artifact_version=}\n{event.artifact_version_string=}\n{event.artifact_collection_name=}\n{event.project_name=}\n{event.entity_name=}')
+    
+    print(event)
     if token.credentials != os.environ["AUTH_TOKEN"]:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -16,7 +16,7 @@ class Event(BaseModel):
     project_name: str
     entity_name: str
 
-    def print_payload(self):
+    def __str__(self):
         msg = 'Payload:\n========\n'
         for k,v in self.model_dump().items():
             msg += f'{k}={v}\n'
@@ -26,7 +26,7 @@ class Event(BaseModel):
 def webhook(event: Event, 
             token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     "Receive the webhook and print the payload.  Uses a token to authenticate."
-    print(event.print_payload())
+    print(event)
     if token.credentials != 'secret-random-token':
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
