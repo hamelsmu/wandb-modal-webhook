@@ -4,7 +4,9 @@ from pydantic import BaseModel
 
 auth_scheme = HTTPBearer()
 app = FastAPI()
+
 class Event(BaseModel):
+    "Defines the payload your webhook will send."
     event_type: str
     event_author: str
     alias: str
@@ -21,10 +23,11 @@ class Event(BaseModel):
         return msg
 
 @app.post("/")
-def webhook(event: Event, token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
-    "This will receive the webhook and print the payload and return a 200 response."
+def webhook(event: Event, 
+            token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
+    "Receive the webhook and print the payload.  Uses a token to authenticate."
     print(event.print_payload())
-    if token.credentials != 'Bearer secret-random-token':
+    if token.credentials != 'secret-random-token':
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect bearer token",
