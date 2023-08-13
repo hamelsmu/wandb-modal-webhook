@@ -1,11 +1,11 @@
 # see https://modal.com/docs/guide/webhooks
-from fastapi import Depends, HTTPException, status, Request
+from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-from modal import Secret, Stub, web_endpoint
-import json
+from modal import Secret, Stub, Image, web_endpoint
 
 auth_scheme = HTTPBearer()
+img = Image.debian_slim().pip_install("fastapi==0.101.0", "pydantic==2.1.1")
 
 stub = Stub("wandb-hook")
 class Event(BaseModel):
@@ -25,11 +25,11 @@ class Event(BaseModel):
             msg += f'{k}={v}\n'
         return msg
 
-@stub.function(secret=Secret.from_name("my-random-secret"))
+@stub.function(secret=Secret.from_name("my-random-secret"), image=img)
 @web_endpoint(method="POST")
 async def f(event: Event, token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     import os
-    
+
     print(event)
     if token.credentials != os.environ["AUTH_TOKEN"]:
         raise HTTPException(
