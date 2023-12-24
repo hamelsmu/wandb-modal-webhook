@@ -84,8 +84,8 @@ Webhooks are a nice way to trigger external applications to perform some action.
 
     type in `candidate`.  This will trigger the webhook.  
 
-    > [!IMPORTANT]
-    > Make sure you spell `candidate` correctly, otherwise the webhook won't trigger!
+> [!IMPORTANT]
+> Make sure you spell `candidate` correctly, otherwise the webhook won't trigger!
 
 8. Check the logs. Go to the [logs for your modal webhook](https://modal.com/logs) and you should see something like this:
 
