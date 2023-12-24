@@ -1,5 +1,15 @@
 #!/bin/bash
-curl -X POST "http://localhost:8000/" \
+
+# Default URL
+URL="http://localhost:8000/"
+
+# Check if a URL is provided as the first argument
+if [ "$1" != "" ]; then
+    URL=$1
+fi
+
+# Curl command
+curl -X POST "$URL" \
      -H "Authorization: Bearer secret-random-token" \
      -H "Content-Type: application/json" \
      -d '{

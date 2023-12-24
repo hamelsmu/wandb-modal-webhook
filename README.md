@@ -13,13 +13,14 @@ Webhooks are a nice way to trigger external applications to perform some action.
 1. Setup
 
     ```bash
+    pip install modal
     pip install -U modal-client
     ```
 
 1. Setup a [modal secret](https://modal.com/secrets) with the name `my-random-secret`  with the following fields:
 
     - Key: `AUTH_TOKEN`
-    - Value: `Bearer secret-random-token`
+    - Value: `secret-random-token`
 
 1. Create a [modal webhook](https://modal.com/docs/guide/webhooks) by running the following command from the root of this repo: 
 
@@ -29,9 +30,25 @@ Webhooks are a nice way to trigger external applications to perform some action.
 
     You will get an endpoint that you need to use in the next step.  This url will look something like ` https://hamelsmu--wandb-hook-f.modal.run`
 
-4. Create a secret in your wandb team settings with the name `AUTH_TOKEN` and value `Bearer secret-random-token`
+    Also you will get a deployment url that will look something like `https://modal.com/apps/hamelsmu/wandb-hook` - you can use this to see the logs of your webhook.
 
-5. Create a new [W&B Webhook](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw). Set the url to the one you got in the previous step, and the `Access token` to the `AUTH_TOKEN`.  
+2. Create a secret in your wandb team settings with the name `AUTH_TOKEN` and value `secret-random-token`
+
+3. Test the webhook by running the following command:
+    
+    ```
+    ./curl.sh <your-modal-url>
+    ```
+    You should see the following response locally:
+
+    ```
+    {"message":"Event processed successfully"}
+    ```
+    Open your modal deployment url and you should see something like this on the logs tab:
+
+    ![](images/deployment_logs.png)
+
+5. Create a new [W&B Webhook](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw). Set the url to the one you got in the previous step, and the `Access token` to the `AUTH_TOKEN`.
 
 6. Create a new [automation](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw#1.-create-a-github-fine-grained-personal-access-token-(pat)): Set the trigger to `an artificat alias is added` and set the Alias regex to `candidate`.  Next, set the following payload:
 
