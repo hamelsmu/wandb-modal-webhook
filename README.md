@@ -32,9 +32,7 @@ Webhooks are a nice way to trigger external applications to perform some action.
 
     Also you will get a deployment url that will look something like `https://modal.com/apps/hamelsmu/wandb-hook` - you can use this to see the logs of your webhook.
 
-2. Create a secret in your wandb team settings with the name `AUTH_TOKEN` and value `secret-random-token`
-
-3. Test the webhook by running the following command:
+2. Test the webhook by running the following command:
     
     ```
     ./curl.sh <your-modal-url>
@@ -48,9 +46,20 @@ Webhooks are a nice way to trigger external applications to perform some action.
 
     ![](images/deployment_logs.png)
 
-5. Create a new [W&B Webhook](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw). Set the url to the one you got in the previous step, and the `Access token` to the `AUTH_TOKEN`.
+3. Create a secret in your wandb team settings with the name `AUTH_TOKEN` and value `secret-random-token`
 
-6. Create a new [automation](https://wandb.ai/wandb/wandb-model-cicd/reports/Model-CI-CD-with-W-B--Vmlldzo0OTcwNDQw#1.-create-a-github-fine-grained-personal-access-token-(pat)): Set the trigger to `an artificat alias is added` and set the Alias regex to `candidate`.  Next, set the following payload:
+    ![](images/wandb_create_secret.png)
+
+5. Create a new [W&B Webhook](https://docs.wandb.ai/guides/model_registry/automation#configure-a-webhook) in your team settings. Set the url to the one you got in the previous step, and the `Access token` to the `AUTH_TOKEN`.
+
+    ![](images/wandb_secrets.png)
+
+6. Create a new [webhook automation](https://docs.wandb.ai/guides/model_registry/automation#add-a-webhook) in your team's model registry: Set the trigger to `an artificat alias is added` and set the Alias regex to `candidate`.  
+
+    ![](images/wandb_webhook_auto.png)
+
+
+    Next, set the following payload:
 
     ```json
     {
@@ -65,13 +74,18 @@ Webhooks are a nice way to trigger external applications to perform some action.
     }
     ```
 
+    ![](2023-12-24-13-29-02.png)
+
 7. Trigger the payload
 
     The easiest way to trigger the payload is to go to the model registry and add an alias 
 
     ![](img/2023-08-03-14-12-32.png)
 
-    type in `candidate`.  This will trigger the webhook.
+    type in `candidate`.  This will trigger the webhook.  
+
+    > [!IMPORTANT]
+    > Make sure you spell `candidate` correctly, otherwise the webhook won't trigger!
 
 8. Check the logs. Go to the [logs for your modal webhook](https://modal.com/logs) and you should see something like this:
 
